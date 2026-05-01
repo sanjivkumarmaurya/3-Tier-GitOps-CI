@@ -92,8 +92,8 @@ jobs:
           file: ./api/Dockerfile
           push: true
           tags: |
-            adijaiswal/backend:latest
-            adijaiswal/backend:${{ env.IMAGE_TAG }}
+            sanjivmaurya/backend:latest
+            sanjivmaurya/backend:${{ env.IMAGE_TAG }}
 
   build_frontend_docker_image_and_push:
     runs-on: ubuntu-latest
@@ -137,7 +137,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: image
-          image-ref: adijaiswal/backend:${{ env.IMAGE_TAG }}
+          image-ref: sanjivmaurya/backend:${{ env.IMAGE_TAG }}
           format: table
           exit-code: '0'                 # set to '1' to fail on vulns
           ignore-unfixed: true
@@ -162,7 +162,7 @@ jobs:
       - name: Checkout CD repo
         uses: actions/checkout@v4
         with:
-          repository: jaiswaladi246/3-Tier-GitOps-CD
+          repository: sanjivkumarmaurya/CD
           ref: main
           token: ${{ secrets.CD_REPO_TOKEN }}
           path: cd
@@ -184,7 +184,7 @@ jobs:
                | .spec.template.spec.containers[]
                | select(.name=="backend")
                | .image)
-            = "adijaiswal/backend:" + strenv(IMAGE_TAG)
+            = "sanjivmaurya/backend:" + strenv(IMAGE_TAG)
           ' k8s-prod/backend.yaml
 
           # -- Update ONLY Deployment images (frontend)
@@ -193,7 +193,7 @@ jobs:
                | .spec.template.spec.containers[]
                | select(.name=="frontend")
                | .image)
-            = "adijaiswal/frontend:" + strenv(IMAGE_TAG)
+            = "sanjivmaurya/frontend:" + strenv(IMAGE_TAG)
           ' k8s-prod/frontend.yaml
 
       - name: Commit & push to CD repo
